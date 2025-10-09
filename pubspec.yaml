@@ -1,0 +1,6 @@
+name: dcql
+description: A Dart implementation of Digital Credentials Query Language (DCQL) for querying credentials from digital wallets.
+version: 0.0.1
+
+dev_dependencies:
+  melos: ^7.1.1
