@@ -3,7 +3,7 @@ description: A Dart implementation of Digital Credentials Query Language (DCQL) 
 version: 0.0.1
 
 environment:
-  sdk: ^3.5.3
+  sdk: ^3.9.0
 
 dev_dependencies:
   melos: ^7.1.1
