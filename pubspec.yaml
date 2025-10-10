@@ -19,3 +19,5 @@ dev_dependencies:
   melos: ^6.3.2
   coverage: ^1.11.1
 
+false_secrets:
+  - example/helpers/consts.dart
