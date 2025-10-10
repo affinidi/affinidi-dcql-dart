@@ -1,0 +1,15 @@
+name: examples
+description: Examples folder
+version: 0.0.1
+publish_to: none
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  path: ^1.8.0
+  ssi: ^2.12.4
+  selective_disclosure_jwt: ^1.0.0
+  dcql:
+    path: ../
+
+

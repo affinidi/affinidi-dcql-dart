@@ -1,14 +1,15 @@
 # Contributing
 
-When contributing to this repository, please first discuss the change you wish to make by creating a new [GitHub issue](https://github.com/affinidi/affinidi-tdk/issues/new).
+When contributing to this repository, please first discuss the change you wish to make by creating a new [GitHub issue](https://github.com/affinidi/affinidi-dcql-dart/issues/new).
 
 ## Developement Requirements
 
+- Dart SDK version ^3.5.3
 
 ### Code quality expectations
 
 1. Ensure the pipeline checks are finished successfully.
-2. Ensure the pull request doesn't contain redundant comments, console.log, etc.
+2. Ensure the pull request doesn't contain redundant comments, print, etc.
 3. Ensure your code is covered with unit and integration tests (NOTE: no mocks/stubs in integration tests).
 4. Avoid adding comments to explain what code does, code should be self-explanatory and clean.
 5. Avoid using variable names like `i` or abbreviations - names should be simple and unambiguous.
@@ -35,7 +36,7 @@ include:
 - Focusing on what is best for the community
 - Showing empathy towards other community members
 - Avoiding obvious comments about things like code styling and indentation.
-  ** If you see yourself wanting to do that more than once - open an issue with a repo to update the ESLint/Prettier rules to address this concern once and for all. **Code reviews should be about logic, not indenting or adding more newlines\*\*
+  ** If you see yourself wanting to do that more than once - open an issue with a repo to update the Dart Linter/Prettier rules to address this concern once and for all. **Code reviews should be about logic, not indenting or adding more newlines\*\*
 
 Examples of unacceptable behavior by participants include:
 
