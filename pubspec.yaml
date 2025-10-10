@@ -1,13 +1,20 @@
 name: dcql
 description: A Dart implementation of Digital Credentials Query Language (DCQL) for querying credentials from digital wallets.
-version: 0.0.1
-
+version: 1.0.0
+repository: https://github.com/affinidi/affinidi-dcql-dart
 environment:
-  sdk: ^3.6.0
+  sdk: ^3.5.3
+
+dependencies:
+  json_serializable: ^6.0.0
+  json_annotation: ^4.9.0
+  collection: ^1.19.1
+  selective_disclosure_jwt: ^1.1.0
+  ssi: ^2.12.4
 
 dev_dependencies:
-  melos: ^6.3.2
   lints: ^5.1.1
   test: ^1.24.0
   build_runner: ^2.4.0
+  melos: ^6.3.2
   coverage: ^1.11.1
