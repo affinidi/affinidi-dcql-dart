@@ -12,4 +12,5 @@ dependencies:
   dcql:
     path: ../
 
-
+false_secrets:
+  - ./consts.dart
