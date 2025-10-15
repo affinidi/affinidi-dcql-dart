@@ -9,8 +9,5 @@ class SatisfiedMeta {
   final List<String> actual;
 
   /// Creates a new [SatisfiedMeta] instance.
-  SatisfiedMeta({
-    required this.expected,
-    required this.actual,
-  });
+  SatisfiedMeta({required this.expected, required this.actual});
 }

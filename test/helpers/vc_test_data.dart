@@ -19,21 +19,23 @@ class VcTestData {
       'type': types,
       'issuer': issuerId,
       'issuanceDate': timestamp,
-      'credentialSubject': credentialSubject ??
+      'credentialSubject':
+          credentialSubject ??
           {
             'id': 'did:example:holder',
             'name': 'Test User',
             'email': 'test@example.com',
           },
       'id': id ?? 'urn:uuid:test-${now.millisecondsSinceEpoch}',
-      'proof': proof ??
+      'proof':
+          proof ??
           {
             'type': 'EcdsaSecp256k1Signature2019',
             'created': timestamp,
             'verificationMethod': '$issuerId#key-1',
             'proofPurpose': 'assertionMethod',
-            'jws': 'eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ..signature'
-          }
+            'jws': 'eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ..signature',
+          },
     };
   }
 
@@ -115,7 +117,8 @@ class VcTestData {
       'type': types,
       'issuer': issuerId,
       'validFrom': timestamp,
-      'credentialSubject': credentialSubject ??
+      'credentialSubject':
+          credentialSubject ??
           {
             'id': 'did:example:holder',
             'name': 'Test User',
@@ -174,12 +177,12 @@ class VcTestData {
         'email': 'alice@example.com',
         'addresses': [
           {'street': '123 Main St', 'city': 'New York', 'country': 'USA'},
-          {'street': '456 Oak Ave', 'city': 'Los Angeles', 'country': 'USA'}
+          {'street': '456 Oak Ave', 'city': 'Los Angeles', 'country': 'USA'},
         ],
         'citizenship': [
           {'country': 'USA', 'status': 'citizen'},
-          {'country': 'Canada', 'status': 'permanent_resident'}
-        ]
+          {'country': 'Canada', 'status': 'permanent_resident'},
+        ],
       },
       id: id ?? 'urn:uuid:test-vc',
       issuer: issuer,

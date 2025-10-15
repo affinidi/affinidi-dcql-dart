@@ -7,7 +7,7 @@ void main() {
     group('W3C meta creation', () {
       test('should create instance with W3C meta correctly', () {
         final expectedMeta = createW3cMeta([
-          ['Email']
+          ['Email'],
         ]);
         final actualTypes = ['VerifiableCredential', 'Email'];
 
@@ -19,10 +19,11 @@ void main() {
         expect(satisfiedMeta.expected, equals(expectedMeta));
         expect(satisfiedMeta.actual, equals(actualTypes));
         expect(
-            satisfiedMeta.expected.typeValues,
-            equals([
-              ['Email']
-            ]));
+          satisfiedMeta.expected.typeValues,
+          equals([
+            ['Email'],
+          ]),
+        );
       });
     });
 
@@ -54,8 +55,10 @@ void main() {
 
         expect(satisfiedMeta.expected, equals(expectedMeta));
         expect(satisfiedMeta.actual, equals(actualTypes));
-        expect(satisfiedMeta.expected.doctypeValue,
-            equals('eu.europa.ec.eudiw.pid.1'));
+        expect(
+          satisfiedMeta.expected.doctypeValue,
+          equals('eu.europa.ec.eudiw.pid.1'),
+        );
       });
     });
 

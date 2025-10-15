@@ -48,16 +48,15 @@ void main() {
       });
 
       test('should fail with empty id', () {
-        final cred = DcqlCredential(
-          id: '',
-          format: CredentialFormat.ldpVc,
-        );
+        final cred = DcqlCredential(id: '', format: CredentialFormat.ldpVc);
         final result = cred.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.'));
+          result.errors,
+          contains(
+            'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.',
+          ),
+        );
       });
 
       test('should fail with id containing spaces', () {
@@ -68,9 +67,11 @@ void main() {
         final result = cred.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.'));
+          result.errors,
+          contains(
+            'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.',
+          ),
+        );
       });
 
       test('should fail with id containing special characters', () {
@@ -81,9 +82,11 @@ void main() {
         final result = cred.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.'));
+          result.errors,
+          contains(
+            'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.',
+          ),
+        );
       });
 
       test('should fail with id containing dots', () {
@@ -94,9 +97,11 @@ void main() {
         final result = cred.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.'));
+          result.errors,
+          contains(
+            'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.',
+          ),
+        );
       });
     });
 
@@ -155,8 +160,10 @@ void main() {
         );
         final result = cred.validate();
         expect(result.isValid, isFalse);
-        expect(result.errors,
-            contains('claimSets is provided but claims is null or empty.'));
+        expect(
+          result.errors,
+          contains('claimSets is provided but claims is null or empty.'),
+        );
       });
 
       test('should fail when claimSets is provided but claims is empty', () {
@@ -170,8 +177,10 @@ void main() {
         );
         final result = cred.validate();
         expect(result.isValid, isFalse);
-        expect(result.errors,
-            contains('claimSets is provided but claims is null or empty.'));
+        expect(
+          result.errors,
+          contains('claimSets is provided but claims is null or empty.'),
+        );
       });
     });
 
@@ -191,9 +200,11 @@ void main() {
         final cred = DcqlCredential(
           id: 'cred1',
           format: CredentialFormat.ldpVc,
-          meta: DcqlMeta.forW3C(typeValues: [
-            ['PersonCredential']
-          ]),
+          meta: DcqlMeta.forW3C(
+            typeValues: [
+              ['PersonCredential'],
+            ],
+          ),
         );
         final result = cred.validate();
         expect(result.isValid, isTrue);
@@ -249,13 +260,15 @@ void main() {
         final result = cred.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors
-                .any((e) => e.contains('id must be a non-empty string')),
-            isTrue);
+          result.errors.any((e) => e.contains('id must be a non-empty string')),
+          isTrue,
+        );
         expect(
-            result.errors
-                .any((e) => e.contains('path must be a non-empty array')),
-            isTrue);
+          result.errors.any(
+            (e) => e.contains('path must be a non-empty array'),
+          ),
+          isTrue,
+        );
       });
 
       test('should propagate claim validation errors with claimSets', () {
@@ -264,7 +277,9 @@ void main() {
           format: CredentialFormat.ldpVc,
           claims: [
             DcqlClaim(
-                id: null, path: ['name']), // Invalid when claimSets present
+              id: null,
+              path: ['name'],
+            ), // Invalid when claimSets present
           ],
           claimSets: [
             ['name'],
@@ -273,9 +288,11 @@ void main() {
         final result = cred.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors.any(
-                (e) => e.contains('id is required when claim_sets is present')),
-            isTrue);
+          result.errors.any(
+            (e) => e.contains('id is required when claim_sets is present'),
+          ),
+          isTrue,
+        );
       });
     });
 
@@ -294,11 +311,15 @@ void main() {
         expect(result.isValid, isFalse);
         expect(result.errors, hasLength(3));
         expect(
-            result.errors,
-            contains(
-                'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.'));
-        expect(result.errors,
-            contains('claimSets is provided but claims is null or empty.'));
+          result.errors,
+          contains(
+            'Invalid id: must be a non-empty string consisting of alphanumeric, underscore (_) or hyphen (-) characters.',
+          ),
+        );
+        expect(
+          result.errors,
+          contains('claimSets is provided but claims is null or empty.'),
+        );
         expect(result.errors.any((e) => e.contains('vct_values')), isTrue);
       });
 
@@ -306,9 +327,11 @@ void main() {
         final cred = DcqlCredential(
           id: 'valid-credential-123',
           format: CredentialFormat.ldpVc,
-          meta: DcqlMeta.forW3C(typeValues: [
-            ['PersonCredential']
-          ]),
+          meta: DcqlMeta.forW3C(
+            typeValues: [
+              ['PersonCredential'],
+            ],
+          ),
           claims: [
             DcqlClaim(id: 'name', path: ['credentialSubject', 'name']),
             DcqlClaim(id: 'age', path: ['credentialSubject', 'age']),
@@ -334,9 +357,13 @@ void main() {
         final result = cred.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors.any((e) => e.contains(
-                'id must not be present more than once in claims array')),
-            isTrue);
+          result.errors.any(
+            (e) => e.contains(
+              'id must not be present more than once in claims array',
+            ),
+          ),
+          isTrue,
+        );
       });
 
       test('should validate claims with invalid values and claimSets', () {
@@ -345,9 +372,10 @@ void main() {
           format: CredentialFormat.ldpVc,
           claims: [
             DcqlClaim(
-                id: 'invalid',
-                path: ['name'],
-                values: [3.14]), // Invalid value type
+              id: 'invalid',
+              path: ['name'],
+              values: [3.14],
+            ), // Invalid value type
           ],
           claimSets: [
             ['invalid'],
@@ -356,9 +384,13 @@ void main() {
         final result = cred.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors.any((e) => e.contains(
-                'values must be an array of strings, integers or boolean values')),
-            isTrue);
+          result.errors.any(
+            (e) => e.contains(
+              'values must be an array of strings, integers or boolean values',
+            ),
+          ),
+          isTrue,
+        );
       });
     });
 
@@ -378,8 +410,11 @@ void main() {
             format: format,
           );
           final result = cred.validate();
-          expect(result.isValid, isTrue,
-              reason: 'Format ${format.name} should validate successfully');
+          expect(
+            result.isValid,
+            isTrue,
+            reason: 'Format ${format.name} should validate successfully',
+          );
         }
       });
     });

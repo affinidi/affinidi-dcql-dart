@@ -22,7 +22,7 @@ void main() {
               format: CredentialFormat.ldpVc,
               meta: DcqlMeta.forW3C(
                 typeValues: [
-                  ['EmailCredential']
+                  ['EmailCredential'],
                 ],
               ),
             ),
@@ -48,7 +48,7 @@ void main() {
               format: CredentialFormat.ldpVc,
               meta: DcqlMeta.forW3C(
                 typeValues: [
-                  ['OtherType']
+                  ['OtherType'],
                 ],
               ),
             ),
@@ -96,10 +96,7 @@ void main() {
 
         final query = DcqlCredentialQuery(
           credentials: [
-            DcqlCredential(
-              id: 'cred',
-              format: CredentialFormat.ldpVc,
-            ),
+            DcqlCredential(id: 'cred', format: CredentialFormat.ldpVc),
           ],
         );
 
@@ -119,10 +116,7 @@ void main() {
 
         final query = DcqlCredentialQuery(
           credentials: [
-            DcqlCredential(
-              id: 'cred',
-              format: CredentialFormat.dcSdJwt,
-            ),
+            DcqlCredential(id: 'cred', format: CredentialFormat.dcSdJwt),
           ],
         );
 

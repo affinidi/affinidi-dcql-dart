@@ -44,32 +44,50 @@ void main() {
       test('should extract values from arrays with specific index', () {
         final complexCredential = VcTestData.createNestedArrayTestCredential();
 
-        final firstAddress = complexCredential
-            .getValueByPath(['credentialSubject', 'addresses', 0, 'city']);
+        final firstAddress = complexCredential.getValueByPath([
+          'credentialSubject',
+          'addresses',
+          0,
+          'city',
+        ]);
         expect(firstAddress, 'New York');
 
-        final secondAddress = complexCredential
-            .getValueByPath(['credentialSubject', 'addresses', 1, 'city']);
+        final secondAddress = complexCredential.getValueByPath([
+          'credentialSubject',
+          'addresses',
+          1,
+          'city',
+        ]);
         expect(secondAddress, 'Los Angeles');
       });
 
       test('should return null for non-existent paths', () {
-        final result =
-            credential.getValueByPath(['credentialSubject', 'nonExistent']);
+        final result = credential.getValueByPath([
+          'credentialSubject',
+          'nonExistent',
+        ]);
         expect(result, isNull);
 
         final complexCredential = VcTestData.createNestedArrayTestCredential();
 
-        final result2 = complexCredential
-            .getValueByPath(['credentialSubject', 'addresses', 5, 'city']);
+        final result2 = complexCredential.getValueByPath([
+          'credentialSubject',
+          'addresses',
+          5,
+          'city',
+        ]);
         expect(result2, isNull);
       });
 
       test('should return null for invalid array index', () {
         final complexCredential = VcTestData.createNestedArrayTestCredential();
 
-        final result = complexCredential
-            .getValueByPath(['credentialSubject', 'addresses', -1, 'city']);
+        final result = complexCredential.getValueByPath([
+          'credentialSubject',
+          'addresses',
+          -1,
+          'city',
+        ]);
         expect(result, isNull);
       });
 
@@ -90,12 +108,20 @@ void main() {
       test('should handle complex nested structures', () {
         final complexCredential = VcTestData.createNestedArrayTestCredential();
 
-        final status = complexCredential
-            .getValueByPath(['credentialSubject', 'citizenship', 0, 'status']);
+        final status = complexCredential.getValueByPath([
+          'credentialSubject',
+          'citizenship',
+          0,
+          'status',
+        ]);
         expect(status, 'citizen');
 
-        final canadaStatus = complexCredential
-            .getValueByPath(['credentialSubject', 'citizenship', 1, 'status']);
+        final canadaStatus = complexCredential.getValueByPath([
+          'credentialSubject',
+          'citizenship',
+          1,
+          'status',
+        ]);
         expect(canadaStatus, 'permanent_resident');
       });
     });
@@ -106,7 +132,7 @@ void main() {
           types: ['VerifiableCredential', 'EmailCredential'],
           credentialSubject: {
             'id': 'did:example:holder',
-            'email': 'alice@example.com'
+            'email': 'alice@example.com',
           },
           id: 'urn:uuid:test-vc-v2',
         );
@@ -129,8 +155,10 @@ void main() {
           id: 'vc1',
         );
 
-        final nullEmail =
-            credential.getValueByPath(['credentialSubject', 'email']);
+        final nullEmail = credential.getValueByPath([
+          'credentialSubject',
+          'email',
+        ]);
         expect(nullEmail, isNull);
 
         final name = credential.getValueByPath(['credentialSubject', 'name']);
@@ -142,25 +170,30 @@ void main() {
           types: ['VerifiableCredential'],
           credentialSubject: {
             'id': 'did:example:alice',
-            'address': {
-              'street': null,
-              'city': 'New York',
-              'country': null,
-            },
+            'address': {'street': null, 'city': 'New York', 'country': null},
           },
           id: 'vc1',
         );
 
-        final nullStreet = credential
-            .getValueByPath(['credentialSubject', 'address', 'street']);
+        final nullStreet = credential.getValueByPath([
+          'credentialSubject',
+          'address',
+          'street',
+        ]);
         expect(nullStreet, isNull);
 
-        final nullCountry = credential
-            .getValueByPath(['credentialSubject', 'address', 'country']);
+        final nullCountry = credential.getValueByPath([
+          'credentialSubject',
+          'address',
+          'country',
+        ]);
         expect(nullCountry, isNull);
 
-        final city =
-            credential.getValueByPath(['credentialSubject', 'address', 'city']);
+        final city = credential.getValueByPath([
+          'credentialSubject',
+          'address',
+          'city',
+        ]);
         expect(city, 'New York');
       });
 
@@ -174,20 +207,32 @@ void main() {
           id: 'vc1',
         );
 
-        final nullSkill =
-            credential.getValueByPath(['credentialSubject', 'skills', 1]);
+        final nullSkill = credential.getValueByPath([
+          'credentialSubject',
+          'skills',
+          1,
+        ]);
         expect(nullSkill, isNull);
 
-        final nullSkill2 =
-            credential.getValueByPath(['credentialSubject', 'skills', 3]);
+        final nullSkill2 = credential.getValueByPath([
+          'credentialSubject',
+          'skills',
+          3,
+        ]);
         expect(nullSkill2, isNull);
 
-        final dartSkill =
-            credential.getValueByPath(['credentialSubject', 'skills', 0]);
+        final dartSkill = credential.getValueByPath([
+          'credentialSubject',
+          'skills',
+          0,
+        ]);
         expect(dartSkill, 'Dart');
 
-        final flutterSkill =
-            credential.getValueByPath(['credentialSubject', 'skills', 2]);
+        final flutterSkill = credential.getValueByPath([
+          'credentialSubject',
+          'skills',
+          2,
+        ]);
         expect(flutterSkill, 'Flutter');
       });
 
@@ -201,8 +246,11 @@ void main() {
           id: 'vc1',
         );
 
-        final achievement =
-            credential.getValueByPath(['credentialSubject', 'achievements', 0]);
+        final achievement = credential.getValueByPath([
+          'credentialSubject',
+          'achievements',
+          0,
+        ]);
         expect(achievement, isNull);
       });
 
@@ -216,12 +264,18 @@ void main() {
           id: 'vc1',
         );
 
-        final outOfBounds =
-            credential.getValueByPath(['credentialSubject', 'skills', 5]);
+        final outOfBounds = credential.getValueByPath([
+          'credentialSubject',
+          'skills',
+          5,
+        ]);
         expect(outOfBounds, isNull);
 
-        final negativeIndex =
-            credential.getValueByPath(['credentialSubject', 'skills', -1]);
+        final negativeIndex = credential.getValueByPath([
+          'credentialSubject',
+          'skills',
+          -1,
+        ]);
         expect(negativeIndex, isNull);
       });
     });

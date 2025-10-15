@@ -71,9 +71,13 @@ void main() {
       final result = claim1.validate(claims: [claim1, claim2, claim3]);
       expect(result.isValid, isFalse);
       expect(
-          result.errors.any((e) => e.contains(
-              'id must not be present more than once in claims array')),
-          isTrue);
+        result.errors.any(
+          (e) => e.contains(
+            'id must not be present more than once in claims array',
+          ),
+        ),
+        isTrue,
+      );
     });
     test('should validate path elements not empty', () {
       final claim = DcqlClaim(id: 'test', path: ['name', '']);
@@ -180,7 +184,7 @@ void main() {
           ],
           meta: DcqlMeta.forW3C(
             typeValues: [
-              ['PersonCredential']
+              ['PersonCredential'],
             ],
           ),
         ),
@@ -208,7 +212,7 @@ void main() {
             ],
             meta: DcqlMeta.forW3C(
               typeValues: [
-                ['PersonCredential']
+                ['PersonCredential'],
               ],
             ),
           ),
@@ -234,8 +238,8 @@ void main() {
           'created': '2025-01-01T00:00:00Z',
           'verificationMethod': 'did:example:issuer#key-1',
           'proofPurpose': 'assertionMethod',
-          'jws': 'eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ..sig'
-        }
+          'jws': 'eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ..sig',
+        },
       });
       final value = vc.getValueByPath(['credentialSubject', 'email']);
       expect(value, 'alice@example.com');
@@ -243,20 +247,20 @@ void main() {
   });
   group('W3C meta type_values matching', () {
     Map<String, dynamic> w3cVc({required List<String> types}) => {
-          '@context': ['https://www.w3.org/2018/credentials/v1'],
-          'type': types,
-          'issuer': 'did:example:issuer',
-          'issuanceDate': '2025-01-01T00:00:00Z',
-          'credentialSubject': {'id': 'did:example:holder'},
-          'id': 'urn:uuid:meta-test',
-          'proof': {
-            'type': 'EcdsaSecp256k1Signature2019',
-            'created': '2025-01-01T00:00:00Z',
-            'verificationMethod': 'did:example:issuer#key-1',
-            'proofPurpose': 'assertionMethod',
-            'jws': 'eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ..sig'
-          }
-        };
+      '@context': ['https://www.w3.org/2018/credentials/v1'],
+      'type': types,
+      'issuer': 'did:example:issuer',
+      'issuanceDate': '2025-01-01T00:00:00Z',
+      'credentialSubject': {'id': 'did:example:holder'},
+      'id': 'urn:uuid:meta-test',
+      'proof': {
+        'type': 'EcdsaSecp256k1Signature2019',
+        'created': '2025-01-01T00:00:00Z',
+        'verificationMethod': 'did:example:issuer#key-1',
+        'proofPurpose': 'assertionMethod',
+        'jws': 'eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ..sig',
+      },
+    };
 
     test('should match when VC has one of the requested types', () {
       final vc = W3CDigitalCredential.fromLdVcDataModelV1(
@@ -269,7 +273,7 @@ void main() {
             format: CredentialFormat.ldpVc,
             meta: DcqlMeta.forW3C(
               typeValues: [
-                ['Email']
+                ['Email'],
               ],
             ),
           ),
@@ -291,7 +295,7 @@ void main() {
             format: CredentialFormat.ldpVc,
             meta: DcqlMeta.forW3C(
               typeValues: [
-                ['OtherType']
+                ['OtherType'],
               ],
             ),
           ),
@@ -360,10 +364,7 @@ void main() {
             format: CredentialFormat.ldpVc,
             claims: [
               // Claim without ID - should still be matched
-              DcqlClaim(
-                path: ['credentialSubject', 'name'],
-                values: ['Alice'],
-              ),
+              DcqlClaim(path: ['credentialSubject', 'name'], values: ['Alice']),
               // Claim with ID
               DcqlClaim(
                 id: 'age',
@@ -463,14 +464,8 @@ void main() {
             format: CredentialFormat.ldpVc,
             claims: [
               // All claims without IDs
-              DcqlClaim(
-                path: ['credentialSubject', 'name'],
-                values: ['Alice'],
-              ),
-              DcqlClaim(
-                path: ['credentialSubject', 'age'],
-                values: [30],
-              ),
+              DcqlClaim(path: ['credentialSubject', 'name'], values: ['Alice']),
+              DcqlClaim(path: ['credentialSubject', 'age'], values: [30]),
             ],
           ),
         ],

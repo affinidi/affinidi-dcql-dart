@@ -19,10 +19,10 @@ class SdJwtDigitalCredential implements DigitalCredential {
   /// Use this when you have a raw SD-JWT string that needs to be parsed.
   /// This is the primary way to create SD-JWT credentials.
 
-  SdJwtDigitalCredential.fromSdJwt({
-    required String sdJwtToken,
-  }) : _claims =
-            SdJwtHandlerV1().unverifiedDecode(sdJwtToken: sdJwtToken).claims;
+  SdJwtDigitalCredential.fromSdJwt({required String sdJwtToken})
+    : _claims = SdJwtHandlerV1()
+          .unverifiedDecode(sdJwtToken: sdJwtToken)
+          .claims;
 
   @override
   dynamic getValueByPath(List<dynamic> path) {

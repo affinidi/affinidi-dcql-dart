@@ -104,7 +104,9 @@ class DcqlQueryResult {
 
     // each required set must have at least one option (combination of credential ids)
     // where all referenced credentials are fulfilled (including their claim_sets).
-    return query.credentialSets!.where((set) => set.required).every(
+    return query.credentialSets!
+        .where((set) => set.required)
+        .every(
           (set) => set.options.any(
             (option) => option.every((credentialId) {
               final cred = credentialsById[credentialId];
@@ -161,9 +163,11 @@ class DcqlQueryResult {
 
     for (final r in list) {
       mergedSatisfiedMeta.addAll(r.satisfiedMeta);
-      mergedUnsatisfiedMeta.addAll(r.unsatisfiedMeta.where(
-        (meta) => !mergedSatisfiedMeta.any((sm) => sm.expected == meta),
-      ));
+      mergedUnsatisfiedMeta.addAll(
+        r.unsatisfiedMeta.where(
+          (meta) => !mergedSatisfiedMeta.any((sm) => sm.expected == meta),
+        ),
+      );
     }
 
     // Merge matched credential sets

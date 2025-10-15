@@ -7,8 +7,7 @@ enum CredentialContext {
   v1('https://www.w3.org/2018/credentials/v1'),
 
   /// Credentials v2 context.
-  v2('https://www.w3.org/ns/credentials/v2'),
-  ;
+  v2('https://www.w3.org/ns/credentials/v2');
 
   /// The full context URL.
   final String url;

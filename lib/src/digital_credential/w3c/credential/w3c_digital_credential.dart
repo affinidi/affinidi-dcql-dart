@@ -14,15 +14,15 @@ class W3CDigitalCredential implements DigitalCredential {
 
   /// Creates a [W3CDigitalCredential] from W3C VC v1.0 JSON data.
   W3CDigitalCredential.fromLdVcDataModelV1(Map<String, dynamic> json)
-      : _vc = VcDataModelV1.fromJson(json);
+    : _vc = VcDataModelV1.fromJson(json);
 
   /// Creates a [W3CDigitalCredential] from W3C VC v2.0 JSON data.
   W3CDigitalCredential.fromLdVcDataModelV2(Map<String, dynamic> json)
-      : _vc = VcDataModelV2.fromJson(json);
+    : _vc = VcDataModelV2.fromJson(json);
 
   /// Creates a [W3CDigitalCredential] from a [SdJwt].
   W3CDigitalCredential.fromSdJwt(SdJwt sdJwt)
-      : _vc = SdJwtDataModelV2.fromSdJwt(sdJwt);
+    : _vc = SdJwtDataModelV2.fromSdJwt(sdJwt);
 
   @override
   dynamic getValueByPath(List<dynamic> path) {

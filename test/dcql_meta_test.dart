@@ -21,7 +21,8 @@ void main() {
 
     test('should create for SD-JWT credentials', () {
       final meta = DcqlMeta.forDcSdJwt(
-          vctValues: ['EmailCredential', 'PersonCredential']);
+        vctValues: ['EmailCredential', 'PersonCredential'],
+      );
 
       expect(meta.vctValues, ['EmailCredential', 'PersonCredential']);
       expect(meta.doctypeValue, isNull);
@@ -57,8 +58,10 @@ void main() {
         final result = meta.validate(format: CredentialFormat.dcSdJwt);
 
         expect(result.isValid, isFalse);
-        expect(result.errors,
-            contains('vct_values must be provided for dc+sd-jwt format.'));
+        expect(
+          result.errors,
+          contains('vct_values must be provided for dc+sd-jwt format.'),
+        );
       });
 
       test('should validate dcSdJwt format with empty vct_values', () {
@@ -66,8 +69,10 @@ void main() {
         final result = meta.validate(format: CredentialFormat.dcSdJwt);
 
         expect(result.isValid, isFalse);
-        expect(result.errors,
-            contains('vct_values must be provided for dc+sd-jwt format.'));
+        expect(
+          result.errors,
+          contains('vct_values must be provided for dc+sd-jwt format.'),
+        );
       });
 
       test('should validate dcSdJwt format with valid vct_values', () {
@@ -82,8 +87,10 @@ void main() {
         final result = meta.validate(format: CredentialFormat.ldpVc);
 
         expect(result.isValid, isFalse);
-        expect(result.errors,
-            contains('type_values must be provided for w3C format.'));
+        expect(
+          result.errors,
+          contains('type_values must be provided for w3C format.'),
+        );
       });
 
       test('should validate ldpVc format with empty type_values', () {
@@ -91,8 +98,10 @@ void main() {
         final result = meta.validate(format: CredentialFormat.ldpVc);
 
         expect(result.isValid, isFalse);
-        expect(result.errors,
-            contains('type_values must be provided for w3C format.'));
+        expect(
+          result.errors,
+          contains('type_values must be provided for w3C format.'),
+        );
       });
 
       test('should validate ldpVc format with valid type_values', () {
@@ -211,10 +220,12 @@ void main() {
       });
 
       test('should handle empty type_values sublists', () {
-        final meta = DcqlMeta(typeValues: [
-          [],
-          ['PersonCredential'],
-        ]);
+        final meta = DcqlMeta(
+          typeValues: [
+            [],
+            ['PersonCredential'],
+          ],
+        );
         expect(meta.typeValues, hasLength(2));
         expect(meta.typeValues![0], isEmpty);
         expect(meta.typeValues![1], ['PersonCredential']);

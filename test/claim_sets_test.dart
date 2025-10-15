@@ -6,9 +6,7 @@ void main() {
   group('ClaimSets matching', () {
     final vcSet1 = VcTestData.createW3CCredential(
       types: ['VerifiableCredential', 'NameCredential'],
-      credentialSubject: {
-        'name': 'Alice',
-      },
+      credentialSubject: {'name': 'Alice'},
       id: 'urn:uuid:1',
     );
     final vcSet2 = VcTestData.createW3CCredential(
@@ -31,11 +29,7 @@ void main() {
           path: ['credentialSubject', 'name'],
           values: ['Alice'],
         ),
-        DcqlClaim(
-          id: 'age',
-          path: ['credentialSubject', 'age'],
-          values: [30],
-        ),
+        DcqlClaim(id: 'age', path: ['credentialSubject', 'age'], values: [30]),
         DcqlClaim(
           id: 'email',
           path: ['credentialSubject', 'email'],
@@ -68,204 +62,217 @@ void main() {
 
     group('satisfiedClaims evidence validation', () {
       test(
-          'should return false when evidence lacks complete required claim_set',
-          () {
-        final cred = DcqlCredential(
-          id: 'cred1',
-          format: CredentialFormat.ldpVc,
-          claims: [
-            DcqlClaim(
-              id: 'name',
-              path: ['credentialSubject', 'name'],
-              values: ['Alice'],
-            ),
-            DcqlClaim(
-              id: 'age',
-              path: ['credentialSubject', 'age'],
-              values: [30],
-            ),
-          ],
-          claimSets: [
-            ['name', 'age'],
-          ],
-        );
-
-        final query = DcqlCredentialQuery(credentials: [cred]);
-        final vc = VcTestData.createW3CCredential(
-          types: ['VerifiableCredential', 'PersonCredential'],
-          credentialSubject: {'name': 'Alice', 'age': 30},
-          id: 'urn:uuid:3',
-        );
-
-        final result = DcqlQueryResult(
-          query: query,
-          verifiableCredentials: {
-            'cred1': [vc],
-          },
-          satisfiedClaimsByCredential: {
-            'cred1': [
-              {'name'}.toSet(), // missing 'age' so requirement not met
+        'should return false when evidence lacks complete required claim_set',
+        () {
+          final cred = DcqlCredential(
+            id: 'cred1',
+            format: CredentialFormat.ldpVc,
+            claims: [
+              DcqlClaim(
+                id: 'name',
+                path: ['credentialSubject', 'name'],
+                values: ['Alice'],
+              ),
+              DcqlClaim(
+                id: 'age',
+                path: ['credentialSubject', 'age'],
+                values: [30],
+              ),
             ],
-          },
-        );
-        expect(result.fulfilled, isFalse);
-      });
+            claimSets: [
+              ['name', 'age'],
+            ],
+          );
 
-      test('should fall back to true when no evidence but VC matched upstream',
-          () {
-        final cred = DcqlCredential(
-          id: 'cred1',
-          format: CredentialFormat.ldpVc,
-          claims: [
-            DcqlClaim(
-              id: 'name',
-              path: ['credentialSubject', 'name'],
-              values: ['Alice'],
-            ),
-            DcqlClaim(
-              id: 'age',
-              path: ['credentialSubject', 'age'],
-              values: [30],
-            ),
-          ],
-          claimSets: [
-            ['name', 'age'],
-          ],
-        );
+          final query = DcqlCredentialQuery(credentials: [cred]);
+          final vc = VcTestData.createW3CCredential(
+            types: ['VerifiableCredential', 'PersonCredential'],
+            credentialSubject: {'name': 'Alice', 'age': 30},
+            id: 'urn:uuid:3',
+          );
 
-        final query = DcqlCredentialQuery(credentials: [cred]);
-        final vc = VcTestData.createW3CCredential(
-          types: ['VerifiableCredential', 'PersonCredential'],
-          credentialSubject: {'name': 'Alice', 'age': 30},
-          id: 'urn:uuid:4',
-        );
+          final result = DcqlQueryResult(
+            query: query,
+            verifiableCredentials: {
+              'cred1': [vc],
+            },
+            satisfiedClaimsByCredential: {
+              'cred1': [
+                {'name'}.toSet(), // missing 'age' so requirement not met
+              ],
+            },
+          );
+          expect(result.fulfilled, isFalse);
+        },
+      );
 
-        final result = DcqlQueryResult(
-          query: query,
-          verifiableCredentials: {
-            'cred1': [vc],
-          },
-        );
-        expect(result.fulfilled, isTrue);
-      });
+      test(
+        'should fall back to true when no evidence but VC matched upstream',
+        () {
+          final cred = DcqlCredential(
+            id: 'cred1',
+            format: CredentialFormat.ldpVc,
+            claims: [
+              DcqlClaim(
+                id: 'name',
+                path: ['credentialSubject', 'name'],
+                values: ['Alice'],
+              ),
+              DcqlClaim(
+                id: 'age',
+                path: ['credentialSubject', 'age'],
+                values: [30],
+              ),
+            ],
+            claimSets: [
+              ['name', 'age'],
+            ],
+          );
+
+          final query = DcqlCredentialQuery(credentials: [cred]);
+          final vc = VcTestData.createW3CCredential(
+            types: ['VerifiableCredential', 'PersonCredential'],
+            credentialSubject: {'name': 'Alice', 'age': 30},
+            id: 'urn:uuid:4',
+          );
+
+          final result = DcqlQueryResult(
+            query: query,
+            verifiableCredentials: {
+              'cred1': [vc],
+            },
+          );
+          expect(result.fulfilled, isTrue);
+        },
+      );
     });
 
     group('credential sets evaluation', () {
       test(
-          'should fail when required set needs both credentials but one is missing',
-          () {
-        final credA =
-            DcqlCredential(id: 'A', format: CredentialFormat.ldpVc, claims: [
-          DcqlClaim(
-            id: 'name',
-            path: ['credentialSubject', 'name'],
-            values: ['Alice'],
-          ),
-          DcqlClaim(
-            id: 'age',
-            path: ['credentialSubject', 'age'],
-            values: [30],
-          ),
-        ]);
-        final credB =
-            DcqlCredential(id: 'B', format: CredentialFormat.ldpVc, claims: [
-          DcqlClaim(
-            id: 'name',
-            path: ['credentialSubject', 'name'],
-            values: ['Bob'],
-          ),
-          DcqlClaim(
-            id: 'age',
-            path: ['credentialSubject', 'age'],
-            values: [25],
-          ),
-        ]);
+        'should fail when required set needs both credentials but one is missing',
+        () {
+          final credA = DcqlCredential(
+            id: 'A',
+            format: CredentialFormat.ldpVc,
+            claims: [
+              DcqlClaim(
+                id: 'name',
+                path: ['credentialSubject', 'name'],
+                values: ['Alice'],
+              ),
+              DcqlClaim(
+                id: 'age',
+                path: ['credentialSubject', 'age'],
+                values: [30],
+              ),
+            ],
+          );
+          final credB = DcqlCredential(
+            id: 'B',
+            format: CredentialFormat.ldpVc,
+            claims: [
+              DcqlClaim(
+                id: 'name',
+                path: ['credentialSubject', 'name'],
+                values: ['Bob'],
+              ),
+              DcqlClaim(
+                id: 'age',
+                path: ['credentialSubject', 'age'],
+                values: [25],
+              ),
+            ],
+          );
 
-        final query = DcqlCredentialQuery(
-          credentials: [credA, credB],
-          credentialSets: [
-            DcqlCredentialSet(
-              options: [
-                ['A', 'B'],
-              ],
-            ),
-          ],
-        );
+          final query = DcqlCredentialQuery(
+            credentials: [credA, credB],
+            credentialSets: [
+              DcqlCredentialSet(
+                options: [
+                  ['A', 'B'],
+                ],
+              ),
+            ],
+          );
 
-        final vc = VcTestData.createW3CCredential(
-          types: ['VerifiableCredential', 'Misc'],
-          credentialSubject: {
-            'name': 'Alice',
-            'age': 30,
-          },
-          id: 'urn:uuid:5',
-        );
+          final vc = VcTestData.createW3CCredential(
+            types: ['VerifiableCredential', 'Misc'],
+            credentialSubject: {'name': 'Alice', 'age': 30},
+            id: 'urn:uuid:5',
+          );
 
-        final result = query.query([vc]);
-        expect(result.fulfilled, isFalse);
-      });
+          final result = query.query([vc]);
+          expect(result.fulfilled, isFalse);
+        },
+      );
 
       test(
-          'should fulfill required set with OR options when single match exists',
-          () {
-        final credA =
-            DcqlCredential(id: 'A', format: CredentialFormat.ldpVc, claims: [
-          DcqlClaim(
-            id: 'name',
-            path: ['credentialSubject', 'name'],
-            values: ['Alice'],
-          ),
-          DcqlClaim(
-            id: 'age',
-            path: ['credentialSubject', 'age'],
-            values: [30],
-          ),
-        ]);
-        final credB =
-            DcqlCredential(id: 'B', format: CredentialFormat.ldpVc, claims: [
-          DcqlClaim(
-            id: 'name',
-            path: ['credentialSubject', 'name'],
-            values: ['Bob'],
-          ),
-          DcqlClaim(
-            id: 'age',
-            path: ['credentialSubject', 'age'],
-            values: [25],
-          ),
-        ]);
+        'should fulfill required set with OR options when single match exists',
+        () {
+          final credA = DcqlCredential(
+            id: 'A',
+            format: CredentialFormat.ldpVc,
+            claims: [
+              DcqlClaim(
+                id: 'name',
+                path: ['credentialSubject', 'name'],
+                values: ['Alice'],
+              ),
+              DcqlClaim(
+                id: 'age',
+                path: ['credentialSubject', 'age'],
+                values: [30],
+              ),
+            ],
+          );
+          final credB = DcqlCredential(
+            id: 'B',
+            format: CredentialFormat.ldpVc,
+            claims: [
+              DcqlClaim(
+                id: 'name',
+                path: ['credentialSubject', 'name'],
+                values: ['Bob'],
+              ),
+              DcqlClaim(
+                id: 'age',
+                path: ['credentialSubject', 'age'],
+                values: [25],
+              ),
+            ],
+          );
 
-        final query = DcqlCredentialQuery(
-          credentials: [credA, credB],
-          credentialSets: [
-            DcqlCredentialSet(
-              options: [
-                ['A'],
-                ['B'],
-              ],
-            ),
-          ],
-        );
+          final query = DcqlCredentialQuery(
+            credentials: [credA, credB],
+            credentialSets: [
+              DcqlCredentialSet(
+                options: [
+                  ['A'],
+                  ['B'],
+                ],
+              ),
+            ],
+          );
 
-        final vc = VcTestData.createW3CCredential(
-          types: ['VerifiableCredential', 'Misc'],
-          credentialSubject: {
-            'name': 'Alice',
-            'age': 30,
-          },
-          id: 'urn:uuid:6',
-        );
+          final vc = VcTestData.createW3CCredential(
+            types: ['VerifiableCredential', 'Misc'],
+            credentialSubject: {'name': 'Alice', 'age': 30},
+            id: 'urn:uuid:6',
+          );
 
-        final result = query.query([vc]);
-        expect(result.fulfilled, isTrue);
-        expect(result.verifiableCredentials['A']!.length, 1);
-      });
+          final result = query.query([vc]);
+          expect(result.fulfilled, isTrue);
+          expect(result.verifiableCredentials['A']!.length, 1);
+        },
+      );
     });
 
     group('combine() method', () {
       test('should concatenate satisfiedClaimsByCredential lists', () {
-        final cred =
-            DcqlCredential(id: 'cred1', format: CredentialFormat.ldpVc);
+        final cred = DcqlCredential(
+          id: 'cred1',
+          format: CredentialFormat.ldpVc,
+        );
         final query = DcqlCredentialQuery(credentials: [cred]);
 
         final result1 = DcqlQueryResult(

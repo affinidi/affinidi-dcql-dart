@@ -42,7 +42,8 @@ class CredentialSetMatchResult {
       matchedOptions.where((option) => !option.matches).toList();
 
   @override
-  String toString() => 'CredentialSetMatchResult('
+  String toString() =>
+      'CredentialSetMatchResult('
       'setIndex: $setIndex, '
       'required: ${credentialSet.required}, '
       'satisfied: $isSatisfied, '

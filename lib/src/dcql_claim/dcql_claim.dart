@@ -72,7 +72,8 @@ class DcqlClaim {
     }
 
     if (path.any(
-        (element) => (element != null && element is! int && element.isEmpty))) {
+      (element) => (element != null && element is! int && element.isEmpty),
+    )) {
       result.addError('path elements must not be empty');
     }
 

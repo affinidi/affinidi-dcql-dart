@@ -80,98 +80,102 @@ void main() {
       });
 
       test('should return false when no credentials are matched', () {
-        final result = DcqlQueryResult(
-          query: query,
-          verifiableCredentials: {},
-        );
+        final result = DcqlQueryResult(query: query, verifiableCredentials: {});
 
         expect(result.fulfilled, isFalse);
       });
 
-      test('should handle claim sets correctly when satisfied claims provided',
-          () {
-        final queryWithClaimSets = DcqlCredentialQuery(
-          credentials: [
-            DcqlCredential(
-              id: 'cred1',
-              format: CredentialFormat.ldpVc,
-              claims: [
-                DcqlClaim(
+      test(
+        'should handle claim sets correctly when satisfied claims provided',
+        () {
+          final queryWithClaimSets = DcqlCredentialQuery(
+            credentials: [
+              DcqlCredential(
+                id: 'cred1',
+                format: CredentialFormat.ldpVc,
+                claims: [
+                  DcqlClaim(
                     id: 'name',
                     path: ['credentialSubject', 'name'],
-                    values: ['Alice']),
-                DcqlClaim(
+                    values: ['Alice'],
+                  ),
+                  DcqlClaim(
                     id: 'email',
                     path: ['credentialSubject', 'email'],
-                    values: ['alice@example.com']),
-              ],
-              claimSets: [
-                ['name', 'email'],
-              ],
-            ),
-          ],
-        );
-
-        final resultWithEvidence = DcqlQueryResult(
-          query: queryWithClaimSets,
-          verifiableCredentials: {
-            'cred1': [vc1],
-          },
-          satisfiedClaimsByCredential: {
-            'cred1': [
-              {'name', 'email'},
+                    values: ['alice@example.com'],
+                  ),
+                ],
+                claimSets: [
+                  ['name', 'email'],
+                ],
+              ),
             ],
-          },
-        );
-        expect(resultWithEvidence.fulfilled, isTrue);
+          );
 
-        final resultIncomplete = DcqlQueryResult(
-          query: queryWithClaimSets,
-          verifiableCredentials: {
-            'cred1': [vc1],
-          },
-          satisfiedClaimsByCredential: {
-            'cred1': [
-              {'name'},
-            ],
-          },
-        );
-        expect(resultIncomplete.fulfilled, isFalse);
-      });
+          final resultWithEvidence = DcqlQueryResult(
+            query: queryWithClaimSets,
+            verifiableCredentials: {
+              'cred1': [vc1],
+            },
+            satisfiedClaimsByCredential: {
+              'cred1': [
+                {'name', 'email'},
+              ],
+            },
+          );
+          expect(resultWithEvidence.fulfilled, isTrue);
+
+          final resultIncomplete = DcqlQueryResult(
+            query: queryWithClaimSets,
+            verifiableCredentials: {
+              'cred1': [vc1],
+            },
+            satisfiedClaimsByCredential: {
+              'cred1': [
+                {'name'},
+              ],
+            },
+          );
+          expect(resultIncomplete.fulfilled, isFalse);
+        },
+      );
 
       test(
-          'should fall back to true when no satisfied claims evidence but VC matched',
-          () {
-        final queryWithClaimSets = DcqlCredentialQuery(
-          credentials: [
-            DcqlCredential(
-              id: 'cred1',
-              format: CredentialFormat.ldpVc,
-              claims: [
-                DcqlClaim(
+        'should fall back to true when no satisfied claims evidence but VC matched',
+        () {
+          final queryWithClaimSets = DcqlCredentialQuery(
+            credentials: [
+              DcqlCredential(
+                id: 'cred1',
+                format: CredentialFormat.ldpVc,
+                claims: [
+                  DcqlClaim(
                     id: 'name',
                     path: ['credentialSubject', 'name'],
-                    values: ['Alice']),
-                DcqlClaim(
+                    values: ['Alice'],
+                  ),
+                  DcqlClaim(
                     id: 'email',
                     path: ['credentialSubject', 'email'],
-                    values: ['alice@example.com']),
-              ],
-              claimSets: [
-                ['name', 'email'],
-              ],
-            ),
-          ],
-        );
+                    values: ['alice@example.com'],
+                  ),
+                ],
+                claimSets: [
+                  ['name', 'email'],
+                ],
+              ),
+            ],
+          );
 
-        final result = DcqlQueryResult(
-          query: queryWithClaimSets,
-          verifiableCredentials: {
-            'cred1': [vc1],
-          },
-        );
-        expect(result.fulfilled, isTrue);
-      });
+          final result = DcqlQueryResult(
+            query: queryWithClaimSets,
+            verifiableCredentials: {
+              'cred1': [vc1],
+            },
+          );
+          expect(result.fulfilled, isTrue);
+        },
+      );
 
       test('should handle credential sets correctly', () {
         final queryWithCredentialSets = DcqlCredentialQuery(
@@ -241,23 +245,28 @@ void main() {
       });
 
       test(
-          'should throw exception when combining results with different queries',
-          () {
-        final query1 = DcqlCredentialQuery(credentials: [
-          DcqlCredential(id: 'cred1', format: CredentialFormat.ldpVc),
-        ]);
-        final query2 = DcqlCredentialQuery(credentials: [
-          DcqlCredential(id: 'cred2', format: CredentialFormat.ldpVc),
-        ]);
+        'should throw exception when combining results with different queries',
+        () {
+          final query1 = DcqlCredentialQuery(
+            credentials: [
+              DcqlCredential(id: 'cred1', format: CredentialFormat.ldpVc),
+            ],
+          );
+          final query2 = DcqlCredentialQuery(
+            credentials: [
+              DcqlCredential(id: 'cred2', format: CredentialFormat.ldpVc),
+            ],
+          );
 
-        final result1 = DcqlQueryResult(query: query1);
-        final result2 = DcqlQueryResult(query: query2);
+          final result1 = DcqlQueryResult(query: query1);
+          final result2 = DcqlQueryResult(query: query2);
 
-        expect(
-          () => DcqlQueryResult.combine([result1, result2]),
-          throwsA(isA<Exception>()),
-        );
-      });
+          expect(
+            () => DcqlQueryResult.combine([result1, result2]),
+            throwsA(isA<Exception>()),
+          );
+        },
+      );
 
       test('should combine satisfied claims correctly', () {
         final result1 = DcqlQueryResult(
@@ -287,10 +296,14 @@ void main() {
       });
 
       test('should combine unsatisfied credentials', () {
-        final unsatisfiedCred1 =
-            DcqlCredential(id: 'cred1', format: CredentialFormat.ldpVc);
-        final unsatisfiedCred2 =
-            DcqlCredential(id: 'cred2', format: CredentialFormat.ldpVc);
+        final unsatisfiedCred1 = DcqlCredential(
+          id: 'cred1',
+          format: CredentialFormat.ldpVc,
+        );
+        final unsatisfiedCred2 = DcqlCredential(
+          id: 'cred2',
+          format: CredentialFormat.ldpVc,
+        );
 
         final result1 = DcqlQueryResult(
           query: query,
@@ -305,19 +318,20 @@ void main() {
         final combined = DcqlQueryResult.combine([result1, result2]);
 
         expect(combined.unsatisfiedQueryCredentialSets, hasLength(2));
-        expect(combined.unsatisfiedQueryCredentialSets,
-            contains(unsatisfiedCred1));
-        expect(combined.unsatisfiedQueryCredentialSets,
-            contains(unsatisfiedCred2));
+        expect(
+          combined.unsatisfiedQueryCredentialSets,
+          contains(unsatisfiedCred1),
+        );
+        expect(
+          combined.unsatisfiedQueryCredentialSets,
+          contains(unsatisfiedCred2),
+        );
       });
     });
 
     group('edge cases', () {
       test('should handle empty verifiable credentials', () {
-        final result = DcqlQueryResult(
-          query: query,
-          verifiableCredentials: {},
-        );
+        final result = DcqlQueryResult(query: query, verifiableCredentials: {});
 
         expect(result.verifiableCredentials, isEmpty);
         expect(result.fulfilled, isFalse);

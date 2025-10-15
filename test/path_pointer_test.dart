@@ -15,20 +15,20 @@ void main() {
             {
               'type': 'BachelorDegree',
               'name': 'Bachelor of Science and Arts',
-              'year': 2020
+              'year': 2020,
             },
-            {'type': 'MasterDegree', 'name': 'Master of Science', 'year': 2023}
+            {'type': 'MasterDegree', 'name': 'Master of Science', 'year': 2023},
           ],
           'citizenship': [
             {'country': 'US', 'documentNumber': 'N123'},
-            {'country': 'Canada', 'documentNumber': 'C456'}
+            {'country': 'Canada', 'documentNumber': 'C456'},
           ],
           'address': {
             'street_address': '123 Main St',
             'locality': 'Anytown',
             'region': 'Anystate',
-            'country': 'US'
-          }
+            'country': 'US',
+          },
         },
         'holder': {
           'id': 'did:key:zQ3shnHRFYxDpASTxaTFBMcqtFASxyzctDx8xYj2USw7QUaLb',
@@ -51,31 +51,42 @@ void main() {
 
     group('credential query with path pointers', () {
       test('should match credential with array wildcard path', () {
-        final query = DcqlCredentialQuery(credentials: [
-          DcqlCredential(
+        final query = DcqlCredentialQuery(
+          credentials: [
+            DcqlCredential(
               id: 'citizenship',
               format: CredentialFormat.ldpVc,
               claims: [
                 DcqlClaim(
-                    id: 'country',
-                    path: ['credentialSubject', 'citizenship', null, 'country'],
-                    values: ['US'])
-              ])
-        ]);
+                  id: 'country',
+                  path: ['credentialSubject', 'citizenship', null, 'country'],
+                  values: ['US'],
+                ),
+              ],
+            ),
+          ],
+        );
 
         final result = query.query([credential]);
         expect(result.fulfilled, isTrue);
       });
 
       test('should match credential with specific array index', () {
-        final query = DcqlCredentialQuery(credentials: [
-          DcqlCredential(id: 'degree', format: CredentialFormat.ldpVc, claims: [
-            DcqlClaim(
-                id: 'masterDegree',
-                path: ['credentialSubject', 'degrees', 1, 'type'],
-                values: ['MasterDegree'])
-          ])
-        ]);
+        final query = DcqlCredentialQuery(
+          credentials: [
+            DcqlCredential(
+              id: 'degree',
+              format: CredentialFormat.ldpVc,
+              claims: [
+                DcqlClaim(
+                  id: 'masterDegree',
+                  path: ['credentialSubject', 'degrees', 1, 'type'],
+                  values: ['MasterDegree'],
+                ),
+              ],
+            ),
+          ],
+        );
 
         final result = query.query([credential]);
         expect(result.fulfilled, isTrue);
@@ -89,172 +100,234 @@ void main() {
       });
 
       test('should access nested object property', () {
-        final result = credential
-            .getValueByPath(['credentialSubject', 'address', 'country']);
+        final result = credential.getValueByPath([
+          'credentialSubject',
+          'address',
+          'country',
+        ]);
         expect(result, equals('US'));
       });
 
       test('should access array with specific index', () {
-        final result = credential
-            .getValueByPath(['credentialSubject', 'degrees', 0, 'type']);
+        final result = credential.getValueByPath([
+          'credentialSubject',
+          'degrees',
+          0,
+          'type',
+        ]);
         expect(result, equals('BachelorDegree'));
       });
 
       test('should match array with wildcard', () {
-        final result = credential
-            .getValueByPath(['credentialSubject', 'degrees', null, 'type']);
+        final result = credential.getValueByPath([
+          'credentialSubject',
+          'degrees',
+          null,
+          'type',
+        ]);
         expect(
-            result,
-            equals([
-              'BachelorDegree',
-              'MasterDegree'
-            ])); // Should return all degrees
+          result,
+          equals(['BachelorDegree', 'MasterDegree']),
+        ); // Should return all degrees
       });
 
       test('should match array wildcard with multiple possible matches', () {
-        final result = credential.getValueByPath(
-            ['credentialSubject', 'citizenship', null, 'country']);
+        final result = credential.getValueByPath([
+          'credentialSubject',
+          'citizenship',
+          null,
+          'country',
+        ]);
         expect(result, equals(['US', 'Canada'])); // Should return all countries
       });
 
       test('should return null for non-existent path', () {
-        final result = credential
-            .getValueByPath(['credentialSubject', 'nonexistent', 'field']);
+        final result = credential.getValueByPath([
+          'credentialSubject',
+          'nonexistent',
+          'field',
+        ]);
         expect(result, isNull);
       });
 
       test('should return null for index out of bounds', () {
-        final result = credential
-            .getValueByPath(['credentialSubject', 'degrees', 99, 'type']);
+        final result = credential.getValueByPath([
+          'credentialSubject',
+          'degrees',
+          99,
+          'type',
+        ]);
         expect(result, isNull);
       });
     });
 
     group('query validation', () {
       test('should not match when array index is wrong', () {
-        final query = DcqlCredentialQuery(credentials: [
-          DcqlCredential(id: 'degree', format: CredentialFormat.ldpVc, claims: [
-            DcqlClaim(
-                id: 'masterDegree',
-                path: ['credentialSubject', 'degrees', 0, 'type'],
-                values: ['MasterDegree'] // MasterDegree is at index 1, not 0
-                )
-          ])
-        ]);
+        final query = DcqlCredentialQuery(
+          credentials: [
+            DcqlCredential(
+              id: 'degree',
+              format: CredentialFormat.ldpVc,
+              claims: [
+                DcqlClaim(
+                  id: 'masterDegree',
+                  path: ['credentialSubject', 'degrees', 0, 'type'],
+                  values: ['MasterDegree'], // MasterDegree is at index 1, not 0
+                ),
+              ],
+            ),
+          ],
+        );
 
         final result = query.query([credential]);
-        expect(result.fulfilled, isFalse,
-            reason: 'Should not match when value is at different index');
+        expect(
+          result.fulfilled,
+          isFalse,
+          reason: 'Should not match when value is at different index',
+        );
       });
 
       test('should not match when value exists but is different', () {
-        final query = DcqlCredentialQuery(credentials: [
-          DcqlCredential(id: 'degree', format: CredentialFormat.ldpVc, claims: [
-            DcqlClaim(
-                id: 'bachelordegree',
-                path: ['credentialSubject', 'degrees', 0, 'type'],
-                values: ['PhD'] // Actual value is BachelorDegree
-                )
-          ])
-        ]);
+        final query = DcqlCredentialQuery(
+          credentials: [
+            DcqlCredential(
+              id: 'degree',
+              format: CredentialFormat.ldpVc,
+              claims: [
+                DcqlClaim(
+                  id: 'bachelordegree',
+                  path: ['credentialSubject', 'degrees', 0, 'type'],
+                  values: ['PhD'], // Actual value is BachelorDegree
+                ),
+              ],
+            ),
+          ],
+        );
 
         final result = query.query([credential]);
-        expect(result.fulfilled, isFalse,
-            reason: 'Should not match when value exists but is different');
+        expect(
+          result.fulfilled,
+          isFalse,
+          reason: 'Should not match when value exists but is different',
+        );
       });
 
       test('should not match with nested path beyond array', () {
-        final query = DcqlCredentialQuery(credentials: [
-          DcqlCredential(
+        final query = DcqlCredentialQuery(
+          credentials: [
+            DcqlCredential(
               id: 'citizenship',
               format: CredentialFormat.ldpVc,
               claims: [
                 DcqlClaim(
-                    id: 'country',
-                    path: [
-                      'credentialSubject',
-                      'citizenship',
-                      'country'
-                    ], // Missing array index or wildcard
-                    values: [
-                      'US'
-                    ])
-              ])
-        ]);
+                  id: 'country',
+                  path: [
+                    'credentialSubject',
+                    'citizenship',
+                    'country',
+                  ], // Missing array index or wildcard
+                  values: ['US'],
+                ),
+              ],
+            ),
+          ],
+        );
 
         final result = query.query([credential]);
-        expect(result.fulfilled, isFalse,
-            reason: 'Should not match when array accessor is missing');
+        expect(
+          result.fulfilled,
+          isFalse,
+          reason: 'Should not match when array accessor is missing',
+        );
       });
 
       test('should not match with wrong credential format', () {
-        final query = DcqlCredentialQuery(credentials: [
-          DcqlCredential(
+        final query = DcqlCredentialQuery(
+          credentials: [
+            DcqlCredential(
               id: 'degree',
               format:
                   CredentialFormat.dcSdJwt, // Wrong format for W3C credential
               claims: [
                 DcqlClaim(
-                    id: 'bachelordegree',
-                    path: ['credentialSubject', 'degrees', 0, 'type'],
-                    values: ['BachelorDegree'])
-              ])
-        ]);
+                  id: 'bachelordegree',
+                  path: ['credentialSubject', 'degrees', 0, 'type'],
+                  values: ['BachelorDegree'],
+                ),
+              ],
+            ),
+          ],
+        );
 
         final result = query.query([credential]);
-        expect(result.fulfilled, isFalse,
-            reason: 'Should not match when credential format is wrong');
+        expect(
+          result.fulfilled,
+          isFalse,
+          reason: 'Should not match when credential format is wrong',
+        );
       });
 
       test('should not match with wildcards in non-array paths', () {
-        final query = DcqlCredentialQuery(credentials: [
-          DcqlCredential(
+        final query = DcqlCredentialQuery(
+          credentials: [
+            DcqlCredential(
               id: 'address',
               format: CredentialFormat.ldpVc,
               claims: [
                 DcqlClaim(
-                    id: 'countryWildcard',
-                    path: [
-                      'credentialSubject',
-                      'address',
-                      null,
-                      'country'
-                    ], // address is not an array
-                    values: [
-                      'US'
-                    ])
-              ])
-        ]);
+                  id: 'countryWildcard',
+                  path: [
+                    'credentialSubject',
+                    'address',
+                    null,
+                    'country',
+                  ], // address is not an array
+                  values: ['US'],
+                ),
+              ],
+            ),
+          ],
+        );
 
         final result = query.query([credential]);
-        expect(result.fulfilled, isFalse,
-            reason: 'Should not match when wildcard is used in object path');
+        expect(
+          result.fulfilled,
+          isFalse,
+          reason: 'Should not match when wildcard is used in object path',
+        );
       });
 
       test('should not match with multiple claim sets when one is invalid', () {
-        final query = DcqlCredentialQuery(credentials: [
-          DcqlCredential(
+        final query = DcqlCredentialQuery(
+          credentials: [
+            DcqlCredential(
               id: 'composite',
               format: CredentialFormat.ldpVc,
               claims: [
                 DcqlClaim(
-                    id: 'validClaim',
-                    path: ['credentialSubject', 'degrees', 0, 'type'],
-                    values: ['BachelorDegree']),
+                  id: 'validClaim',
+                  path: ['credentialSubject', 'degrees', 0, 'type'],
+                  values: ['BachelorDegree'],
+                ),
                 DcqlClaim(
-                    id: 'invalidClaim',
-                    path: ['credentialSubject', 'nonexistent', null, 'field'],
-                    values: ['someValue'])
+                  id: 'invalidClaim',
+                  path: ['credentialSubject', 'nonexistent', null, 'field'],
+                  values: ['someValue'],
+                ),
               ],
               claimSets: [
-                ['validClaim', 'invalidClaim']
-              ])
-        ]);
+                ['validClaim', 'invalidClaim'],
+              ],
+            ),
+          ],
+        );
 
         final result = query.query([credential]);
-        expect(result.fulfilled, isFalse,
-            reason:
-                'Should not match when any claim in a claim set is invalid');
+        expect(
+          result.fulfilled,
+          isFalse,
+          reason: 'Should not match when any claim in a claim set is invalid',
+        );
       });
     });
   });

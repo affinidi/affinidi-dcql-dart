@@ -32,18 +32,18 @@ class DcqlMeta {
 
   /// Creates a [DcqlMeta] for SD-JWT credentials.
   DcqlMeta.forDcSdJwt({required this.vctValues})
-      : doctypeValue = null,
-        typeValues = null;
+    : doctypeValue = null,
+      typeValues = null;
 
   /// Creates a [DcqlMeta] for mdoc credentials.
   DcqlMeta.forMdoc({required this.doctypeValue})
-      : vctValues = null,
-        typeValues = null;
+    : vctValues = null,
+      typeValues = null;
 
   /// Creates a [DcqlMeta] for W3C credentials.
   DcqlMeta.forW3C({required this.typeValues})
-      : vctValues = null,
-        doctypeValue = null;
+    : vctValues = null,
+      doctypeValue = null;
 
   /// Creates a [DcqlMeta] from JSON.
   factory DcqlMeta.fromJson(Map<String, dynamic> json) =>
@@ -69,7 +69,8 @@ class DcqlMeta {
         break;
       case CredentialFormat.msoMdoc:
         throw UnimplementedError(
-            'Validation for msoMdoc format is not implemented');
+          'Validation for msoMdoc format is not implemented',
+        );
       default:
         break;
     }

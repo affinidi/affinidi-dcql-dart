@@ -58,7 +58,7 @@ void main() {
         'type': 'etsi_tl',
         'values': [
           'https://trust-framework.example.com',
-          'https://another-framework.example.com'
+          'https://another-framework.example.com',
         ],
       };
 
@@ -68,7 +68,9 @@ void main() {
       expect(authority.values, hasLength(2));
       expect(authority.values, contains('https://trust-framework.example.com'));
       expect(
-          authority.values, contains('https://another-framework.example.com'));
+        authority.values,
+        contains('https://another-framework.example.com'),
+      );
     });
 
     test('should preserve data in round-trip serialization', () {
@@ -77,7 +79,7 @@ void main() {
         values: [
           'did:example:issuer1',
           'did:example:issuer2',
-          'did:example:issuer3'
+          'did:example:issuer3',
         ],
       );
 

@@ -13,12 +13,16 @@ void main() {
 
       test('should fail when id is null but claim sets present', () {
         final claim = DcqlClaim(path: ['name']);
-        final result = claim.validate(claimSets: [
-          ['name']
-        ]);
+        final result = claim.validate(
+          claimSets: [
+            ['name'],
+          ],
+        );
         expect(result.isValid, isFalse);
-        expect(result.errors,
-            contains('id is required when claim_sets is present'));
+        expect(
+          result.errors,
+          contains('id is required when claim_sets is present'),
+        );
       });
 
       test('should fail when id is empty string', () {
@@ -61,9 +65,11 @@ void main() {
         final result = claim.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'id must consist of alphanumeric, underscore (_) or hyphen (-) characters'));
+          result.errors,
+          contains(
+            'id must consist of alphanumeric, underscore (_) or hyphen (-) characters',
+          ),
+        );
       });
 
       test('should fail with invalid characters - special symbols', () {
@@ -71,9 +77,11 @@ void main() {
         final result = claim.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'id must consist of alphanumeric, underscore (_) or hyphen (-) characters'));
+          result.errors,
+          contains(
+            'id must consist of alphanumeric, underscore (_) or hyphen (-) characters',
+          ),
+        );
       });
 
       test('should fail with invalid characters - dots', () {
@@ -81,9 +89,11 @@ void main() {
         final result = claim.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'id must consist of alphanumeric, underscore (_) or hyphen (-) characters'));
+          result.errors,
+          contains(
+            'id must consist of alphanumeric, underscore (_) or hyphen (-) characters',
+          ),
+        );
       });
     });
 
@@ -106,9 +116,11 @@ void main() {
         final result = claim1.validate(claims: [claim1, claim2, claim3]);
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'id must not be present more than once in claims array: claim id: duplicate'));
+          result.errors,
+          contains(
+            'id must not be present more than once in claims array: claim id: duplicate',
+          ),
+        );
       });
 
       test('should fail when multiple duplicates of same id', () {
@@ -119,9 +131,11 @@ void main() {
         final result = claim1.validate(claims: [claim1, claim2, claim3]);
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'id must not be present more than once in claims array: claim id: triple'));
+          result.errors,
+          contains(
+            'id must not be present more than once in claims array: claim id: triple',
+          ),
+        );
       });
 
       test('should pass when only one claim has a specific id', () {
@@ -154,16 +168,20 @@ void main() {
       });
 
       test('should pass with valid multi-element path', () {
-        final claim =
-            DcqlClaim(id: 'test', path: ['credentialSubject', 'name']);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['credentialSubject', 'name'],
+        );
         final result = claim.validate();
         expect(result.isValid, isTrue);
         expect(result.errors, isEmpty);
       });
 
       test('should pass with mixed path element types', () {
-        final claim =
-            DcqlClaim(id: 'test', path: ['credentialSubject', 0, 'name']);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['credentialSubject', 0, 'name'],
+        );
         final result = claim.validate();
         expect(result.isValid, isTrue);
         expect(result.errors, isEmpty);
@@ -191,8 +209,10 @@ void main() {
       });
 
       test('should pass with null elements in path (allowed)', () {
-        final claim =
-            DcqlClaim(id: 'test', path: ['credentialSubject', null, 'name']);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['credentialSubject', null, 'name'],
+        );
         final result = claim.validate();
         expect(result.isValid, isTrue);
         expect(result.errors, isEmpty);
@@ -215,147 +235,196 @@ void main() {
       });
 
       test('should pass with valid string values', () {
-        final claim =
-            DcqlClaim(id: 'test', path: ['name'], values: ['Alice', 'Bob']);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['name'],
+          values: ['Alice', 'Bob'],
+        );
         final result = claim.validate();
         expect(result.isValid, isTrue);
         expect(result.errors, isEmpty);
       });
 
       test('should pass with valid integer values', () {
-        final claim =
-            DcqlClaim(id: 'test', path: ['age'], values: [25, 30, 35]);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['age'],
+          values: [25, 30, 35],
+        );
         final result = claim.validate();
         expect(result.isValid, isTrue);
         expect(result.errors, isEmpty);
       });
 
       test('should pass with valid boolean values', () {
-        final claim =
-            DcqlClaim(id: 'test', path: ['active'], values: [true, false]);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['active'],
+          values: [true, false],
+        );
         final result = claim.validate();
         expect(result.isValid, isTrue);
         expect(result.errors, isEmpty);
       });
 
       test('should pass with mixed valid types', () {
-        final claim =
-            DcqlClaim(id: 'test', path: ['mixed'], values: ['Alice', 30, true]);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['mixed'],
+          values: ['Alice', 30, true],
+        );
         final result = claim.validate();
         expect(result.isValid, isTrue);
         expect(result.errors, isEmpty);
       });
 
       test('should fail with double values', () {
-        final claim =
-            DcqlClaim(id: 'test', path: ['score'], values: [3.14, 2.7]);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['score'],
+          values: [3.14, 2.7],
+        );
         final result = claim.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'values must be an array of strings, integers or boolean values'));
+          result.errors,
+          contains(
+            'values must be an array of strings, integers or boolean values',
+          ),
+        );
       });
 
       test('should fail with object values', () {
-        final claim = DcqlClaim(id: 'test', path: [
-          'object'
-        ], values: [
-          {'key': 'value'}
-        ]);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['object'],
+          values: [
+            {'key': 'value'},
+          ],
+        );
         final result = claim.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'values must be an array of strings, integers or boolean values'));
+          result.errors,
+          contains(
+            'values must be an array of strings, integers or boolean values',
+          ),
+        );
       });
 
       test('should fail with array values', () {
-        final claim = DcqlClaim(id: 'test', path: [
-          'array'
-        ], values: [
-          ['item1', 'item2']
-        ]);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['array'],
+          values: [
+            ['item1', 'item2'],
+          ],
+        );
         final result = claim.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'values must be an array of strings, integers or boolean values'));
+          result.errors,
+          contains(
+            'values must be an array of strings, integers or boolean values',
+          ),
+        );
       });
 
       test('should fail with mixed invalid and valid types', () {
-        final claim =
-            DcqlClaim(id: 'test', path: ['mixed'], values: ['Alice', 30, 3.14]);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['mixed'],
+          values: ['Alice', 30, 3.14],
+        );
         final result = claim.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'values must be an array of strings, integers or boolean values'));
+          result.errors,
+          contains(
+            'values must be an array of strings, integers or boolean values',
+          ),
+        );
       });
 
       test('should fail with null values in array', () {
         final claim = DcqlClaim(
-            id: 'test', path: ['nullable'], values: ['Alice', null, 'Bob']);
+          id: 'test',
+          path: ['nullable'],
+          values: ['Alice', null, 'Bob'],
+        );
         final result = claim.validate();
         expect(result.isValid, isFalse);
         expect(
-            result.errors,
-            contains(
-                'values must be an array of strings, integers or boolean values'));
+          result.errors,
+          contains(
+            'values must be an array of strings, integers or boolean values',
+          ),
+        );
       });
 
       test('should stop at first invalid value type', () {
-        final claim = DcqlClaim(id: 'test', path: [
-          'multi'
-        ], values: [
-          3.14,
-          ['array'],
-          {'key': 'value'}
-        ]);
+        final claim = DcqlClaim(
+          id: 'test',
+          path: ['multi'],
+          values: [
+            3.14,
+            ['array'],
+            {'key': 'value'},
+          ],
+        );
         final result = claim.validate();
         expect(result.isValid, isFalse);
         expect(result.errors, hasLength(1));
         expect(
-            result.errors,
-            contains(
-                'values must be an array of strings, integers or boolean values'));
+          result.errors,
+          contains(
+            'values must be an array of strings, integers or boolean values',
+          ),
+        );
       });
     });
 
     group('combined validation scenarios', () {
       test('should validate all constraints when claim sets provided', () {
         final claim = DcqlClaim(id: null, path: [], values: [3.14]);
-        final result = claim.validate(claimSets: [
-          ['test']
-        ]);
+        final result = claim.validate(
+          claimSets: [
+            ['test'],
+          ],
+        );
         expect(result.isValid, isFalse);
         expect(result.errors, hasLength(3));
-        expect(result.errors,
-            contains('id is required when claim_sets is present'));
+        expect(
+          result.errors,
+          contains('id is required when claim_sets is present'),
+        );
         expect(result.errors, contains('path must be a non-empty array'));
         expect(
-            result.errors,
-            contains(
-                'values must be an array of strings, integers or boolean values'));
+          result.errors,
+          contains(
+            'values must be an array of strings, integers or boolean values',
+          ),
+        );
       });
 
       test('should pass validation when all constraints satisfied', () {
         final claim1 = DcqlClaim(
-            id: 'name',
-            path: ['credentialSubject', 'name'],
-            values: ['Alice', 'Bob']);
+          id: 'name',
+          path: ['credentialSubject', 'name'],
+          values: ['Alice', 'Bob'],
+        );
         final claim2 = DcqlClaim(
-            id: 'age', path: ['credentialSubject', 'age'], values: [25, 30]);
+          id: 'age',
+          path: ['credentialSubject', 'age'],
+          values: [25, 30],
+        );
 
-        final result = claim1.validate(claims: [
-          claim1,
-          claim2
-        ], claimSets: [
-          ['name', 'age']
-        ]);
+        final result = claim1.validate(
+          claims: [claim1, claim2],
+          claimSets: [
+            ['name', 'age'],
+          ],
+        );
         expect(result.isValid, isTrue);
         expect(result.errors, isEmpty);
       });

@@ -10,74 +10,92 @@ void main() {
     test('should generate default IDs for claims without explicit IDs', () {
       final claim1 = DcqlClaim(path: ['credentialSubject', 'name']);
       final claim2 = DcqlClaim(path: ['credentialSubject', 'email']);
-      final claim3 =
-          DcqlClaim(id: 'explicit_id', path: ['credentialSubject', 'age']);
+      final claim3 = DcqlClaim(
+        id: 'explicit_id',
+        path: ['credentialSubject', 'age'],
+      );
 
       expect(claim1.getEffectiveId(0), 'CLAIM_0');
       expect(claim2.getEffectiveId(1), 'CLAIM_1');
       expect(claim3.getEffectiveId(2), 'explicit_id');
     });
 
-    test('should capture both satisfied and unsatisfied claims in query result',
-        () {
-      final query = DcqlCredentialQuery(
-        credentials: [
-          DcqlCredential(
-            id: 'test_cred',
-            format: CredentialFormat.ldpVc,
-            claims: [
-              DcqlClaim(
-                  path: ['credentialSubject', 'name']), // Will get CLAIM_0
-              DcqlClaim(
-                  path: ['credentialSubject', 'email']), // Will get CLAIM_1
-              DcqlClaim(
+    test(
+      'should capture both satisfied and unsatisfied claims in query result',
+      () {
+        final query = DcqlCredentialQuery(
+          credentials: [
+            DcqlCredential(
+              id: 'test_cred',
+              format: CredentialFormat.ldpVc,
+              claims: [
+                DcqlClaim(
+                  path: ['credentialSubject', 'name'],
+                ), // Will get CLAIM_0
+                DcqlClaim(
+                  path: ['credentialSubject', 'email'],
+                ), // Will get CLAIM_1
+                DcqlClaim(
                   id: 'age_claim',
-                  path: ['credentialSubject', 'age']), // Explicit ID
-              DcqlClaim(path: [
-                'credentialSubject',
-                'nonexistent'
-              ]), // Will get CLAIM_3 and be unsatisfied
-            ],
-          ),
-        ],
-      );
+                  path: ['credentialSubject', 'age'],
+                ), // Explicit ID
+                DcqlClaim(
+                  path: ['credentialSubject', 'nonexistent'],
+                ), // Will get CLAIM_3 and be unsatisfied
+              ],
+            ),
+          ],
+        );
 
-      // Create a test credential that has name, email, age but not 'nonexistent'
-      final vc = VcTestData.createW3CCredential(
-        types: ['VerifiableCredential', 'TestCredential'],
-        credentialSubject: {
-          'name': 'John Doe',
-          'email': 'john@example.com',
-          'age': 30,
-          // 'nonexistent' field is missing
-        },
-      );
+        // Create a test credential that has name, email, age but not 'nonexistent'
+        final vc = VcTestData.createW3CCredential(
+          types: ['VerifiableCredential', 'TestCredential'],
+          credentialSubject: {
+            'name': 'John Doe',
+            'email': 'john@example.com',
+            'age': 30,
+            // 'nonexistent' field is missing
+          },
+        );
 
-      final result = query.query([vc]);
+        final result = query.query([vc]);
 
-      // Check that we have both satisfied and unsatisfied claims
-      expect(result.satisfiedClaimsByCredential.isNotEmpty, true);
-      expect(result.unsatisfiedClaimsByCredential.isNotEmpty, true);
+        // Check that we have both satisfied and unsatisfied claims
+        expect(result.satisfiedClaimsByCredential.isNotEmpty, true);
+        expect(result.unsatisfiedClaimsByCredential.isNotEmpty, true);
 
-      final satisfiedClaims = result.satisfiedClaimsByCredential['test_cred'];
-      final unsatisfiedClaims =
-          result.unsatisfiedClaimsByCredential['test_cred'];
+        final satisfiedClaims = result.satisfiedClaimsByCredential['test_cred'];
+        final unsatisfiedClaims =
+            result.unsatisfiedClaimsByCredential['test_cred'];
 
-      expect(satisfiedClaims, isNotNull);
-      expect(unsatisfiedClaims, isNotNull);
+        expect(satisfiedClaims, isNotNull);
+        expect(unsatisfiedClaims, isNotNull);
 
-      final flatSatisfied = satisfiedClaims!.expand((set) => set).toSet();
-      expect(flatSatisfied.contains('CLAIM_0'), true,
-          reason: 'Should contain default ID for name claim');
-      expect(flatSatisfied.contains('CLAIM_1'), true,
-          reason: 'Should contain default ID for email claim');
-      expect(flatSatisfied.contains('age_claim'), true,
-          reason: 'Should contain explicit ID for age claim');
+        final flatSatisfied = satisfiedClaims!.expand((set) => set).toSet();
+        expect(
+          flatSatisfied.contains('CLAIM_0'),
+          true,
+          reason: 'Should contain default ID for name claim',
+        );
+        expect(
+          flatSatisfied.contains('CLAIM_1'),
+          true,
+          reason: 'Should contain default ID for email claim',
+        );
+        expect(
+          flatSatisfied.contains('age_claim'),
+          true,
+          reason: 'Should contain explicit ID for age claim',
+        );
 
-      final flatUnsatisfied = unsatisfiedClaims!.expand((set) => set).toSet();
-      expect(flatUnsatisfied.contains('CLAIM_3'), true,
-          reason: 'Should contain default ID for nonexistent claim');
-    });
+        final flatUnsatisfied = unsatisfiedClaims!.expand((set) => set).toSet();
+        expect(
+          flatUnsatisfied.contains('CLAIM_3'),
+          true,
+          reason: 'Should contain default ID for nonexistent claim',
+        );
+      },
+    );
 
     test('should handle claim sets with explicit IDs correctly', () {
       final query = DcqlCredentialQuery(
@@ -108,8 +126,11 @@ void main() {
 
       final result = query.query([vc]);
 
-      expect(result.fulfilled, true,
-          reason: 'Query should be fulfilled when claim set is satisfied');
+      expect(
+        result.fulfilled,
+        true,
+        reason: 'Query should be fulfilled when claim set is satisfied',
+      );
 
       final satisfiedClaims = result.satisfiedClaimsByCredential['test_cred'];
       expect(satisfiedClaims, isNotNull);
@@ -144,8 +165,11 @@ void main() {
 
       final result = query.query([vc]);
 
-      expect(result.fulfilled, false,
-          reason: 'Query should not be fulfilled when no claims match');
+      expect(
+        result.fulfilled,
+        false,
+        reason: 'Query should not be fulfilled when no claims match',
+      );
       expect(result.unsatisfiedClaimsByCredential.isNotEmpty, true);
 
       final unsatisfiedClaims =

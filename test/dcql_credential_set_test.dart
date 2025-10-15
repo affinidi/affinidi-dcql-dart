@@ -107,9 +107,7 @@ void main() {
     });
 
     test('should handle empty options list', () {
-      final credentialSet = DcqlCredentialSet(
-        options: [],
-      );
+      final credentialSet = DcqlCredentialSet(options: []);
 
       expect(credentialSet.options, isEmpty);
       expect(credentialSet.required, isTrue);
