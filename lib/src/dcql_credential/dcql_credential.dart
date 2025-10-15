@@ -39,7 +39,7 @@ class DcqlCredential {
   /// a boolean which indicates whether the Verifier requires a Cryptographic Holder Binding proof.
   /// The default value is true, i.e., a Verifiable Presentation with Cryptographic Holder Binding is required.
   /// If set to false, the Verifier accepts a Credential without Cryptographic Holder Binding proof.
-  @JsonKey(name: 'require_cryptographic_holder_binding')
+  @JsonKey(name: 'require_cryptographic_holder_binding', defaultValue: true)
   final bool? requireCryptographicHolderBinding;
 
   /// a non-empty array of claims in the requested Credential.
