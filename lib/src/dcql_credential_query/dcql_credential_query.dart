@@ -11,7 +11,7 @@ part 'dcql_credential_query.g.dart';
 
 /// The [DcqlCredentialQuery] class represents a request for a presentation of one or more matching Credentials.
 /// [Spec](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#name-credential-query).
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class DcqlCredentialQuery {
   /// An array of credential queries that specify the requested credentials.
   final Iterable<DcqlCredential> credentials;
@@ -29,7 +29,10 @@ class DcqlCredentialQuery {
   }) {
     if (credentials.isEmpty) {
       throw ArgumentError.value(
-          credentials, 'credentials', 'Must contain at least one item.');
+        credentials,
+        'credentials',
+        'Must contain at least one item.',
+      );
     }
 
     List<ValidationResult> validationResults = [];
@@ -42,21 +45,21 @@ class DcqlCredentialQuery {
 
     if (hasErrors) {
       throw ArgumentError.value(
-          validationResults.fold<String>(
-            '',
-            (result, r) {
-              if (r.errors.isNotEmpty) {
-                result += r.errors.map((e) => e.toString()).join(', ');
-              }
-              return result;
-            },
-          ).toString(),
-          'credentials',
-          'Query is invalid:');
+        validationResults.fold<String>('', (result, r) {
+          if (r.errors.isNotEmpty) {
+            result += r.errors.map((e) => e.toString()).join(', ');
+          }
+          return result;
+        }).toString(),
+        'credentials',
+        'Query is invalid:',
+      );
     }
 
     return DcqlCredentialQuery._(
-        credentials: credentials, credentialSets: credentialSets);
+      credentials: credentials,
+      credentialSets: credentialSets,
+    );
   }
 
   /// Creates a [DcqlCredentialQuery] from JSON.
@@ -67,14 +70,14 @@ class DcqlCredentialQuery {
   Map<String, dynamic> toJson() => _$DcqlCredentialQueryToJson(this);
 
   /// Executes the query against the given [verifiableCredentials].
-  DcqlQueryResult query(
-    Iterable<DigitalCredential> verifiableCredentials,
-  ) {
+  DcqlQueryResult query(Iterable<DigitalCredential> verifiableCredentials) {
     return _matchVerifiableCredentials(credentials, verifiableCredentials);
   }
 
   bool _matchedFormat(
-      DigitalCredential digitalCredential, DcqlCredential dcqlCredential) {
+    DigitalCredential digitalCredential,
+    DcqlCredential dcqlCredential,
+  ) {
     return digitalCredential.format == dcqlCredential.format;
   }
 
@@ -123,8 +126,9 @@ class DcqlCredentialQuery {
           satisfiedClaimSetsForCredential.add(claimMatchResult.satisfiedClaims);
         }
         if (claimMatchResult.unsatisfiedClaims.isNotEmpty) {
-          unsatisfiedClaimSetsForCredential
-              .add(claimMatchResult.unsatisfiedClaims);
+          unsatisfiedClaimSetsForCredential.add(
+            claimMatchResult.unsatisfiedClaims,
+          );
         }
 
         if (claimMatchResult.credentialMatches) {
@@ -158,17 +162,21 @@ class DcqlCredentialQuery {
             (credentialId) => matchedCredentials.containsKey(credentialId),
           );
 
-          matchedOptions.add(MatchedOption(
-            credentialIdentifiers: option,
-            matches: allCredentialsSatisfied,
-          ));
+          matchedOptions.add(
+            MatchedOption(
+              credentialIdentifiers: option,
+              matches: allCredentialsSatisfied,
+            ),
+          );
         }
 
-        matchedCredentialSets.add(CredentialSetMatchResult(
-          credentialSet: credentialSet,
-          setIndex: setIndex,
-          matchedOptions: matchedOptions,
-        ));
+        matchedCredentialSets.add(
+          CredentialSetMatchResult(
+            credentialSet: credentialSet,
+            setIndex: setIndex,
+            matchedOptions: matchedOptions,
+          ),
+        );
 
         setIndex++;
       }
@@ -277,8 +285,9 @@ class DcqlCredentialQuery {
     switch (credentialFormat) {
       case CredentialFormat.ldpVc:
         return _matchW3CMeta(
-            digitalCredential: digitalCredential,
-            dcqlCredential: dcqlCredential);
+          digitalCredential: digitalCredential,
+          dcqlCredential: dcqlCredential,
+        );
       case CredentialFormat.dcSdJwt:
         return _matchSdJwtMeta(
           digitalCredential: digitalCredential,
@@ -289,7 +298,8 @@ class DcqlCredentialQuery {
       case CredentialFormat.acVp:
         // Not modeled in DcqlMeta yet. No meta filtering.
         throw UnimplementedError(
-            'Meta matching not implemented for ${credentialFormat.name}');
+          'Meta matching not implemented for ${credentialFormat.name}',
+        );
     }
   }
 
@@ -312,7 +322,9 @@ class DcqlCredentialQuery {
 
     // Expand actual VC types into fully expanded IRIs (heuristic per spec guidance)
     final actualExpandedTypes = _expandW3CContextLd(
-        types: actualMeta.types, contexts: actualMeta.contexts);
+      types: actualMeta.types,
+      contexts: actualMeta.contexts,
+    );
 
     // Model currently supports a flat list of type values. Treat each as an OR option.
     for (final typeValueArray in requestedTypeValues) {

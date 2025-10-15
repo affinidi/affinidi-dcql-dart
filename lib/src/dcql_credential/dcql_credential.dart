@@ -9,7 +9,7 @@ part 'dcql_credential.g.dart';
 
 /// The Credential class represents a entry in credentials array of the CredentialQuery.
 /// [Spec](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#name-credential-query).
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false)
 class DcqlCredential {
   /// a string identifying the Credential in the response and,
   /// if provided, the constraints in credential_sets.
@@ -35,11 +35,11 @@ class DcqlCredential {
   /// in the corresponding trusted_authorities array if present.
   @JsonKey(name: 'trusted_authorities')
   final List<DcqlTrustedAuthority>? trustedAuthorities;
-  @JsonKey(name: 'require_cryptographic_holder_binding', defaultValue: true)
 
   /// a boolean which indicates whether the Verifier requires a Cryptographic Holder Binding proof.
   /// The default value is true, i.e., a Verifiable Presentation with Cryptographic Holder Binding is required.
   /// If set to false, the Verifier accepts a Credential without Cryptographic Holder Binding proof.
+  @JsonKey(name: 'require_cryptographic_holder_binding')
   final bool? requireCryptographicHolderBinding;
 
   /// a non-empty array of claims in the requested Credential.
@@ -49,6 +49,7 @@ class DcqlCredential {
 
   /// a non-empty array containing arrays of identifiers for elements in claims
   /// that specifies which combinations of claims for the Credential are requested.
+  @JsonKey(name: 'claim_sets')
   final List<List<String>>? claimSets;
 
   /// Creates a Credential object. [Spec](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#name-credential-query).
@@ -82,9 +83,7 @@ class DcqlCredential {
     }
 
     if ((claims == null || claims!.isEmpty) && claimSets != null) {
-      result.addError(
-        'claimSets is provided but claims is null or empty.',
-      );
+      result.addError('claimSets is provided but claims is null or empty.');
     }
 
     result.combine(meta?.validate(format: format));
