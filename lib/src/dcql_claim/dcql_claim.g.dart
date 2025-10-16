@@ -13,7 +13,7 @@ DcqlClaim _$DcqlClaimFromJson(Map<String, dynamic> json) => DcqlClaim(
     );
 
 Map<String, dynamic> _$DcqlClaimToJson(DcqlClaim instance) => <String, dynamic>{
-      'id': instance.id,
+      if (instance.id case final value?) 'id': value,
       'path': instance.path,
-      'values': instance.values,
+      if (instance.values case final value?) 'values': value,
     };

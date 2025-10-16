@@ -6,7 +6,7 @@ part 'dcql_trusted_authority.g.dart';
 /// Defines which issuers or trust frameworks are acceptable for credential verification.
 ///
 /// It ensures only credentials from trusted sources are accepted
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false, explicitToJson: true)
 class DcqlTrustedAuthority {
   /// The type of trusted authority information.
   final TrustedAuthorityType type;

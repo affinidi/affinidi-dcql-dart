@@ -19,7 +19,7 @@ part 'dcql_credential_set.g.dart';
 ///   required: true
 /// );
 /// ```
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false, explicitToJson: true)
 class DcqlCredentialSet {
   /// A non-empty array, where each value in the array is a list of Credential Query identifiers
   /// representing one set of Credentials that satisfies the use case. The value of each element

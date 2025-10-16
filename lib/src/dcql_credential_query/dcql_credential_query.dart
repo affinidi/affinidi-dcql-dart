@@ -11,7 +11,7 @@ part 'dcql_credential_query.g.dart';
 
 /// The [DcqlCredentialQuery] class represents a request for a presentation of one or more matching Credentials.
 /// [Spec](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#name-credential-query).
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false, explicitToJson: true)
 class DcqlCredentialQuery {
   /// An array of credential queries that specify the requested credentials.
   final Iterable<DcqlCredential> credentials;

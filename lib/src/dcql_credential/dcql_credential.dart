@@ -9,7 +9,7 @@ part 'dcql_credential.g.dart';
 
 /// The Credential class represents a entry in credentials array of the CredentialQuery.
 /// [Spec](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#name-credential-query).
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false, explicitToJson: true)
 class DcqlCredential {
   /// a string identifying the Credential in the response and,
   /// if provided, the constraints in credential_sets.
@@ -49,6 +49,7 @@ class DcqlCredential {
 
   /// a non-empty array containing arrays of identifiers for elements in claims
   /// that specifies which combinations of claims for the Credential are requested.
+  @JsonKey(name: 'claim_sets')
   final List<List<String>>? claimSets;
 
   /// Creates a Credential object. [Spec](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#name-credential-query).
