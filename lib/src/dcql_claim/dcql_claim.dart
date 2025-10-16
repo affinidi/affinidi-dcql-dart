@@ -5,7 +5,7 @@ part 'dcql_claim.g.dart';
 
 /// The DcqlClaim class represents a claim in the claims array of the DcqlCredentialQuery.
 /// [Spec](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#claims_query).
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false, explicitToJson: true)
 class DcqlClaim {
   /// Default prefix to be used for auto-generated claim IDs.
   static const String defaultIdPrefix = 'CLAIM_';

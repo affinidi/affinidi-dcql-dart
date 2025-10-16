@@ -17,7 +17,7 @@ DcqlMeta _$DcqlMetaFromJson(Map<String, dynamic> json) => DcqlMeta(
     );
 
 Map<String, dynamic> _$DcqlMetaToJson(DcqlMeta instance) => <String, dynamic>{
-      'vct_values': instance.vctValues,
-      'doctype_value': instance.doctypeValue,
-      'type_values': instance.typeValues,
+      if (instance.vctValues case final value?) 'vct_values': value,
+      if (instance.doctypeValue case final value?) 'doctype_value': value,
+      if (instance.typeValues case final value?) 'type_values': value,
     };

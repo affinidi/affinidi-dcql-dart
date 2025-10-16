@@ -10,7 +10,7 @@ part 'dcql_meta.g.dart';
 /// [Meta for w3c](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#name-parameters-in-the-meta-para).
 /// [Meta for SD JWT](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#sd_jwt_vc_meta_parameter).
 /// [Meta for mdoc](https://openid.net/specs/openid-4-verifiable-presentations-1_0.html#mdocs_meta_parameter).
-@JsonSerializable()
+@JsonSerializable(includeIfNull: false, explicitToJson: true)
 class DcqlMeta {
   /// VCT (Verifiable Credential Type) values for SD-JWT credentials.
   /// Use this to filter SD-JWT credentials by their credential type.

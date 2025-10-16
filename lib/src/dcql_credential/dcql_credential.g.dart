@@ -22,7 +22,7 @@ DcqlCredential _$DcqlCredentialFromJson(Map<String, dynamic> json) =>
       claims: (json['claims'] as List<dynamic>?)
           ?.map((e) => DcqlClaim.fromJson(e as Map<String, dynamic>))
           .toList(),
-      claimSets: (json['claimSets'] as List<dynamic>?)
+      claimSets: (json['claim_sets'] as List<dynamic>?)
           ?.map((e) => (e as List<dynamic>).map((e) => e as String).toList())
           .toList(),
     );
@@ -32,12 +32,15 @@ Map<String, dynamic> _$DcqlCredentialToJson(DcqlCredential instance) =>
       'id': instance.id,
       'format': _$CredentialFormatEnumMap[instance.format]!,
       'multiple': instance.multiple,
-      'meta': instance.meta,
-      'trusted_authorities': instance.trustedAuthorities,
-      'require_cryptographic_holder_binding':
-          instance.requireCryptographicHolderBinding,
-      'claims': instance.claims,
-      'claimSets': instance.claimSets,
+      if (instance.meta?.toJson() case final value?) 'meta': value,
+      if (instance.trustedAuthorities?.map((e) => e.toJson()).toList()
+          case final value?)
+        'trusted_authorities': value,
+      if (instance.requireCryptographicHolderBinding case final value?)
+        'require_cryptographic_holder_binding': value,
+      if (instance.claims?.map((e) => e.toJson()).toList() case final value?)
+        'claims': value,
+      if (instance.claimSets case final value?) 'claim_sets': value,
     };
 
 const _$CredentialFormatEnumMap = {

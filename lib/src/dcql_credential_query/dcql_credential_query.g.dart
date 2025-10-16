@@ -17,6 +17,8 @@ DcqlCredentialQuery _$DcqlCredentialQueryFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$DcqlCredentialQueryToJson(
         DcqlCredentialQuery instance) =>
     <String, dynamic>{
-      'credentials': instance.credentials.toList(),
-      'credential_sets': instance.credentialSets?.toList(),
+      'credentials': instance.credentials.map((e) => e.toJson()).toList(),
+      if (instance.credentialSets?.map((e) => e.toJson()).toList()
+          case final value?)
+        'credential_sets': value,
     };
