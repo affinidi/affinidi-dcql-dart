@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-12-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`dcql` - `v1.2.1`](#dcql---v121)
+
+---
+
+#### `dcql` - `v1.2.1`
+
+ - **FIX**: update example dependencies and fix ssi breaking changes.
+ - **FIX**: update ssi dependency to version 3.0.2 and fix meta context extraction.
+
+## 1.2.1
+
+ - **FIX**: update example dependencies and fix ssi breaking changes.
+ - **FIX**: update ssi dependency to version 3.0.2 and fix meta context extraction.
+
+
 ## 2025-10-16
 
 ### Changes
