@@ -7,7 +7,7 @@ environment:
 
 dependencies:
   path: ^1.8.0
-  ssi: ^2.12.4
+  ssi: ^3.0.2
   selective_disclosure_jwt: ^1.0.0
   dcql:
     path: ../
