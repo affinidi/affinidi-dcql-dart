@@ -60,5 +60,22 @@ class W3CDigitalCredential implements DigitalCredential {
   }
 
   @override
-  W3cMeta get meta => W3cMeta(types: _vc.type, contexts: _vc.context.toSet());
+  W3cMeta get meta {
+    // Extract context data from JsonLdContext object
+    // The context property can be either a List of strings or a single String
+    // Note: Embedded context objects (Maps) are ignored for query complexity
+    // and only URI strings are extracted
+    final contextData = _vc.context.context;
+
+    Set<String> contextSet;
+    if (contextData is List) {
+      contextSet = contextData.whereType<String>().toSet();
+    } else if (contextData is String) {
+      contextSet = {contextData};
+    } else {
+      contextSet = <String>{};
+    }
+
+    return W3cMeta(types: _vc.type, contexts: contextSet);
+  }
 }
